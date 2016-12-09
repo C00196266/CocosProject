@@ -26,6 +26,8 @@ bool GameScreen::init()
 
 	//label->getPosition();
 
+	m_gameState = GameStates::PlaceGunTower;
+
 	auto pauseItem =
 		MenuItemImage::create("GameScreen/Pause_Button.png",
 			"GameScreen/Pause_Button(Click).png",
@@ -42,6 +44,7 @@ bool GameScreen::init()
 	auto menu = Menu::create(pauseItem, NULL);
 	menu->setPosition(Point::ZERO);
 	this->addChild(menu);
+	addBackGroundSprite(visibleSize, origin);
 
 	return true;
 }
@@ -57,4 +60,11 @@ void GameScreen::activateGameOverScene(Ref *pSender)
 {
 	auto scene = GameOver::createScene();
 	Director::getInstance()->replaceScene(TransitionFade::create(1.0, scene));
+}
+
+void GameScreen::addBackGroundSprite(cocos2d::Size const & visibleSize, cocos2d::Point const & origin) { 
+	std::shared_ptr<GameData> ptr = GameData::sharedGameData(); 
+	auto backgroundSprite = Sprite::create(ptr->m_backgroundTextureFile); 
+	backgroundSprite->setPosition(Point((visibleSize.width / 2) + origin.x, (visibleSize.height / 2) + origin.y)); 
+	this->addChild(backgroundSprite, -1); 
 }
