@@ -24,6 +24,11 @@ public:
 	void setScore(int newScore);
 	bool getIsJumping();
 	void setIsJumping(bool isJumping);
+	float getGravityPower();
+	void setGravityPower(float newGravityPower);
+	bool getIsGravityOn();
+	void setIsGravityOn(bool isGravityOn);
+	void setAcceleration(Vec2 newAcceleration);
 private:
 	Vec2 m_acceleration;
 	Vec2 m_position;
@@ -32,5 +37,8 @@ private:
 	Vec2 m_size;
 	int m_score;
 	bool m_isJumping;
+	float m_gravityPower;
+	bool m_isGravityOn;
+	const float m_gravityPowerRegen = 0.2;
 };
 
