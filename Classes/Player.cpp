@@ -12,6 +12,8 @@ Player::Player()
 	m_score = 0;
 	m_isJumping = false;
 	m_acceleration = Vec2(0,-9.8f);
+	m_gravityPower = 0;
+	m_isGravityOn = true;
 }
 
 Player::Player(Vec2 position, Color4F colour)
@@ -22,10 +24,32 @@ Player::Player(Vec2 position, Color4F colour)
 	m_score = 0;
 	m_isJumping = false;
 	m_acceleration = Vec2(0, -9.8f);
+	m_gravityPower = 0;
+	m_isGravityOn = true;
 }
 
 void Player::update(float deltaTime)
 {
+	if (m_gravityPower + m_gravityPowerRegen < 100)
+	{
+		m_gravityPower += m_gravityPowerRegen;
+	}
+	else
+	{
+		m_gravityPower = 100;
+	}
+
+	if (m_isGravityOn == false & m_gravityPower > 0)//Gravity Power Reduction
+	{
+		m_gravityPower -= 1.0;
+		if (m_gravityPower < 0)
+		{
+			m_gravityPower = 0;
+			m_acceleration.y = -9.8;
+			m_isGravityOn = true;
+		}
+	}
+
 	m_velocity.y += m_acceleration.y*deltaTime;
 	if (m_isJumping == false)
 	{
@@ -126,4 +150,29 @@ bool Player::getIsJumping()
 void Player::setIsJumping(bool isJumping)
 {
 	m_isJumping = isJumping;
+}
+
+//Gravity Power
+float Player::getGravityPower()
+{
+	return m_gravityPower;
+}
+void Player::setGravityPower(float newGravityPower)
+{
+	m_gravityPower = newGravityPower;
+}
+
+//Jumping
+bool Player::getIsGravityOn()
+{
+	return m_isGravityOn;
+}
+void Player::setIsGravityOn(bool isGravityOn)
+{
+	m_isGravityOn = isGravityOn;
+}
+
+void Player::setAcceleration(Vec2 newAcceleration)
+{
+	m_acceleration = newAcceleration;
 }
