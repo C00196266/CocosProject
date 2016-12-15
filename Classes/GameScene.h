@@ -1,33 +1,19 @@
-
-#ifndef __Game_SCENE_H__
-#define __Game_SCENE_H__
-
+#pragma once
 
 #include "cocos2d.h"
-#include "Player.h"
+#include "PauseScene.h"
+#include "GameOverScene.h"
 
-
-USING_NS_CC;
 class GameScreen : public cocos2d::Layer
 {
 public:
+	static cocos2d::Scene* createScene();
+	virtual bool init();
 
-	Player *thePlayer;
-    static cocos2d::Scene* createScene();
-	
+	CREATE_FUNC(GameScreen);
 
-    virtual bool init();
-    
-    // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
-
-	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
-
-
-
-	void GameScreen::update(float deltaTime);
-    // implement the "static create()" method manually
-    CREATE_FUNC(GameScreen);
+	// Called when user pauses gameplay.
+	void activatePauseScene(Ref *pSender);
+	// Called at game over 
+	void activateGameOverScene(Ref *pSender);
 };
-
-#endif // __Game_SCENE_H__
