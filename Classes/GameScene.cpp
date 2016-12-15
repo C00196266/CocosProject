@@ -20,6 +20,32 @@ bool GameScreen::init()
 	{
 		return false;
 	}
+
+	//background = Sprite::create("Background.png");
+	//background->setAnchorPoint(Vec2(0, 1));
+	//background->setPosition(0, Director::getInstance()->getVisibleSize().height+100);
+	//this->addChild(background);
+	auto background = cocos2d::LayerColor::create(Color4B(160, 193, 255, 255));
+	this->addChild(background);
+
+	score = 0;
+	time = "0:0";
+	gameHUD = new HUD();
+	this->addChild(gameHUD->getLabelScore());
+	this->addChild(gameHUD->getLabelTime());
+
+	gameHUD->gravityBar = Sprite::create("GravityBar.png");
+	gameHUD->gravityBar->setAnchorPoint(Vec2(0,1));
+	gameHUD->gravityBar->setPosition(gameHUD->getGravityBarRect()->origin);
+	this->addChild(gameHUD->gravityBar);
+
+	gameHUD->gravityBarOutline = Sprite::create("GravityBarOutline.png");
+	gameHUD->gravityBarOutline->setAnchorPoint(Vec2(0, 1));
+	gameHUD->gravityBarOutline->setPosition(gameHUD->getGravityBarRect()->origin);
+	this->addChild(gameHUD->gravityBarOutline);
+
+
+
 	//Player
 	thePlayer = new Player(Vec2(75,800),Color4F::RED);
 	thePlayer->setVelocity(Vec2(0, 0));
@@ -39,6 +65,7 @@ void GameScreen::update(float deltaTime)
 	//Player
 	thePlayer->image->setPosition(thePlayer->getPosition());
 	thePlayer->update(deltaTime);
+	gameHUD->update(score,time,thePlayer->getGravityPower());
 }
 void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {

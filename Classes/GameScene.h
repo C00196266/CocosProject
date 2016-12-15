@@ -7,6 +7,7 @@
 
 #include "cocos2d.h"
 #include "Player.h"
+#include "HUD.h"
 
 
 USING_NS_CC;
@@ -16,6 +17,10 @@ public:
 
 	Player *thePlayer;
 	const float maxGravityPower = 100;
+	int score;
+	std::string time;
+	Sprite *background;
+	HUD *gameHUD;
 
 	static cocos2d::Scene* createScene();
 
