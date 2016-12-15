@@ -11,6 +11,7 @@ Player::Player()
 	m_size = Vec2(50, 50);
 	m_score = 0;
 	m_isJumping = false;
+	m_acceleration = Vec2(0, -9.8f);
 }
 
 Player::Player(Vec2 position, Color4F colour)
@@ -20,21 +21,49 @@ Player::Player(Vec2 position, Color4F colour)
 	m_size = Vec2(50, 50);
 	m_score = 0;
 	m_isJumping = false;
+	m_acceleration = Vec2(0, -9.8f);
 }
 
-void Player::update()
+void Player::update(float deltaTime)
 {
-	printf("Update");
-	
-	if (m_position.y - m_velocity.y > 25)
+	lastPosition = m_position;
+	m_velocity.y += m_acceleration.y*deltaTime;
+	if (m_isJumping == false)
 	{
-		m_position.y -= m_velocity.y;
+		if (direction == 0)//Left Direction
+		{
+			if (m_velocity.x >= 0)
+			{
+				m_velocity.x = 0;
+			}
+			else
+			{
+				m_velocity.x += 0.2;
+			}
+		}
+		if (direction == 1)//Right Direction
+		{
+			if (m_velocity.x <= 0)
+			{
+				m_velocity.x = 0;
+			}
+			else
+			{
+				m_velocity.x -= 0.2;
+			}
+		}
+	}
+	m_position.x += m_velocity.x;
+
+	if (m_position.y + m_velocity.y > (m_size.x / 2))//Gravity
+	{
+		m_position.y += m_velocity.y;
+	}
+	else
+	{
+		m_isJumping = false;
 	}
 }
-
-
-
-
 
 //Position
 Vec2 Player::getPosition()
@@ -94,4 +123,12 @@ bool Player::getIsJumping()
 void Player::setIsJumping(bool isJumping)
 {
 	m_isJumping = isJumping;
+}
+
+void Player::setGravity(float gravity) {
+	m_acceleration.y = gravity;
+}
+
+float Player::getGravity() {
+	return m_acceleration.y;
 }

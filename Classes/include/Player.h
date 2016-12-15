@@ -9,7 +9,8 @@ public:
 	Player();
 	Player(Vec2 m_position, Color4F colour);
 
-	void update();
+	int direction;
+	void update(float deltaTime);
 	Sprite *image;
 	Vec2 getPosition();
 	void setPosition(Vec2 newPosition);
@@ -23,8 +24,12 @@ public:
 	void setScore(int newScore);
 	bool getIsJumping();
 	void setIsJumping(bool isJumping);
+	Vec2 lastPosition;
+	float getGravity();
+	void setGravity(float value);
+
 private:
-	
+	Vec2 m_acceleration;
 	Vec2 m_position;
 	Vec2 m_velocity;
 	Color4F m_colour;
@@ -32,4 +37,3 @@ private:
 	int m_score;
 	bool m_isJumping;
 };
-

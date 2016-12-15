@@ -5,16 +5,26 @@
 
 #include "cocos2d.h"
 #include "Player.h"
+#include "ScorePickup.h"
+#include "CollisionDetection.h"
+#include "Tiles.h"
+#include <vector>
 
+using namespace std;
 
 USING_NS_CC;
 class GameScreen : public cocos2d::Layer
 {
+private:
+	CollisionDetection m_collisionDetector;
 public:
 
 	Player *thePlayer;
     static cocos2d::Scene* createScene();
 	
+	ScorePickup *aScorePickup;
+
+	vector<shared_ptr<Tiles>> m_tiles;
 
     virtual bool init();
     
@@ -23,7 +33,7 @@ public:
 
 	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 
-
+	void checkCollisions();
 
 	void GameScreen::update(float deltaTime);
     // implement the "static create()" method manually
