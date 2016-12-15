@@ -15,46 +15,61 @@ Scene* GameScreen::createScene()
 
 bool GameScreen::init()
 {
+	this->scheculeUpdate();
 	if (!Layer::init())
 	{
 		return false;
 	}
+	//Player
+	thePlayer = new Player(Vec2(75,800),Color4F::RED);
+	thePlayer->setVelocity(Vec2(0, 0));
+	thePlayer->image = Sprite::create("Player.png");
+	thePlayer->image->setPosition(thePlayer->getPosition());
+	this->addChild(thePlayer->image);
 
-	//auto label = Label::createWithSystemFont("Hello World", "Arial", 96);
-	//label->setAnchorPoint(cocos2d::Vec2(0.0f, 0.0f));
-	//this->addChild(label, 1);
-
-	//label->getPosition();
-
-	auto pauseItem =
-		MenuItemImage::create("GameScreen/Pause_Button.png",
-			"GameScreen/Pause_Button(Click).png",
-			CC_CALLBACK_1(GameScreen::activatePauseScene, this));
-
-	Size visibleSize = Director::getInstance()->getVisibleSize();
-	Point origin = Director::getInstance()->getVisibleOrigin();
-
-	pauseItem->setPosition(Point(pauseItem->getContentSize().width -
-		(pauseItem->getContentSize().width / 4) + origin.x,
-		visibleSize.height - pauseItem->getContentSize().height +
-		(pauseItem->getContentSize().width / 4) + origin.y));
-
-	auto menu = Menu::create(pauseItem, NULL);
-	menu->setPosition(Point::ZERO);
-	this->addChild(menu);
-
+	//keyboard Input
+	auto listener = EventListenerKeyboard::create();
+	listener->onKeyPressed = CC_CALLBACK_2(GameScreen::onKeyPressed, this);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	return true;
 }
-
-void GameScreen::activatePauseScene(Ref *pSender)
+void GameScreen::update(float deltaTime) 
 {
-	//auto scene = PauseMenu::createScene();
-	auto scene = PauseScreen::createScene();
-	Director::getInstance()->pushScene(TransitionFade::create(1.0, scene));
+	Size visibleSize = Director::getInstance()->getVisibleSize();
+	//Player
+	thePlayer->image->setPosition(thePlayer->getPosition());
+	thePlayer->update(deltaTime);
+
+void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
+{
+	if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW)
+	{
+		if (thePlayer->getIsJumping() == false)
+		{
+			thePlayer->setVelocity(Vec2(-15, thePlayer->getVelocity().y));
+			thePlayer->direction = 0;
+		}
+	}
+	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
+	{
+		if (thePlayer->getIsJumping() == false)
+		{
+			thePlayer->setVelocity(Vec2(15, thePlayer->getVelocity().y));
+			thePlayer->direction = 1;
+		}
+	}
+	if (keyCode == EventKeyboard::KeyCode::KEY_SPACE)
+	{
+		if (thePlayer->getIsJumping() == false)
+		{
+			thePlayer->setIsJumping(true);
+			thePlayer->setVelocity(Vec2(thePlayer->getVelocity().x, 12.5f));
+		}
+	}
 }
 
-void GameScreen::activateGameOverScene(Ref *pSender)
+void GameScreen::menuCloseCallback(Ref* pSender)
 {
-	auto scene = GameOver::createScene();
-	Director::getInstance()->replaceScene(TransitionFade::create(1.0, scene));
+	//Close the cocos2d-x game scene and quit the application
+	Director::getInstance()->end();
 }
