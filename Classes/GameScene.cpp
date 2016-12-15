@@ -15,7 +15,7 @@ Scene* GameScreen::createScene()
 
 bool GameScreen::init()
 {
-	this->scheculeUpdate();
+	this->scheduleUpdate();
 	if (!Layer::init())
 	{
 		return false;
@@ -33,20 +33,20 @@ bool GameScreen::init()
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	return true;
 }
-void GameScreen::update(float deltaTime) 
+void GameScreen::update(float deltaTime)
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	//Player
 	thePlayer->image->setPosition(thePlayer->getPosition());
 	thePlayer->update(deltaTime);
-
+}
 void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW)
 	{
 		if (thePlayer->getIsJumping() == false)
 		{
-			thePlayer->setVelocity(Vec2(-15, thePlayer->getVelocity().y));
+			thePlayer->setVelocity(Vec2(-7.5, thePlayer->getVelocity().y));
 			thePlayer->direction = 0;
 		}
 	}
@@ -54,7 +54,7 @@ void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 	{
 		if (thePlayer->getIsJumping() == false)
 		{
-			thePlayer->setVelocity(Vec2(15, thePlayer->getVelocity().y));
+			thePlayer->setVelocity(Vec2(7.5, thePlayer->getVelocity().y));
 			thePlayer->direction = 1;
 		}
 	}
@@ -63,7 +63,24 @@ void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		if (thePlayer->getIsJumping() == false)
 		{
 			thePlayer->setIsJumping(true);
-			thePlayer->setVelocity(Vec2(thePlayer->getVelocity().x, 12.5f));
+			thePlayer->setVelocity(Vec2(thePlayer->getVelocity().x, 10.0f));
+		}
+	}
+	if (keyCode == EventKeyboard::KeyCode::KEY_SHIFT)
+	{
+		//gravity toggle
+		if (thePlayer->getGravityPower() > 0 && thePlayer->getIsJumping() == true)
+		{
+			if (thePlayer->getIsGravityOn() == false)
+			{
+				thePlayer->setAcceleration(Vec2(0, -9.8));
+				thePlayer->setIsGravityOn(true);
+			}
+			else
+			{
+				thePlayer->setAcceleration(Vec2(0, 0));
+				thePlayer->setIsGravityOn(false);
+			}
 		}
 	}
 }
