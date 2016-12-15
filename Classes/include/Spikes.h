@@ -1,18 +1,17 @@
-
 #pragma once
 #include "cocos2d.h"
 
 USING_NS_CC;
 
-class Tiles {
+class Spikes {
 private:
 	Vec2 m_pos;
 	Vec2 m_size;
 
 public:
-	Tiles();
+	Spikes();
 
-	Tiles(Vec2 position);
+	Spikes(Vec2 position);
 
 	Vec2 getPos();
 

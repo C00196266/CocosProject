@@ -1,25 +1,25 @@
-#include "Tiles.h"
+#include "Spikes.h"
 
-Tiles::Tiles()
+Spikes::Spikes()
 {
 	m_pos = Vec2(0, 0);
 	m_size = Vec2(50, 50);
 }
 
-Tiles::Tiles(Vec2 position)
+Spikes::Spikes(Vec2 position)
 {
 	m_pos = position;
 	m_size = Vec2(50, 50);
 }
 
-Vec2 Tiles::getPos() {
+Vec2 Spikes::getPos() {
 	return m_pos;
 }
 
-void Tiles::setSize(Vec2 size) {
+void Spikes::setSize(Vec2 size) {
 	m_size = size;
 }
 
-Vec2 Tiles::getSize() {
+Vec2 Spikes::getSize() {
 	return m_size;
 }

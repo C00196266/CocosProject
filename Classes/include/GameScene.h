@@ -8,6 +8,7 @@
 #include "ScorePickup.h"
 #include "CollisionDetection.h"
 #include "Tiles.h"
+#include "Spikes.h"
 #include <vector>
 
 using namespace std;
@@ -25,6 +26,8 @@ public:
 	ScorePickup *aScorePickup;
 
 	vector<shared_ptr<Tiles>> m_tiles;
+
+	vector<shared_ptr<Spikes>> m_spikes;
 
     virtual bool init();
     

@@ -22,7 +22,17 @@ bool GameScreen::init()
 	}
 
 	for (int i = 0; i < 10; i++) {
-		//m_tiles.push_back(new shared_ptr<Tiles>(i * 50, 0));
+		m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(i * 50, 0))));
+		m_tiles.at(i)->sprite = Sprite::create("metalTile.png");
+		m_tiles.at(i)->sprite->setPosition(m_tiles.at(i)->getPos());
+		this->addChild(m_tiles.at(i)->sprite);
+	}
+
+	for (int i = 0; i < 2; i++) {
+		m_spikes.push_back(shared_ptr<Spikes>(new Spikes(Vec2(400 + (i * 50), 50))));
+		m_spikes.at(i)->sprite = Sprite::create("spike.png");
+		m_spikes.at(i)->sprite->setPosition(m_spikes.at(i)->getPos());
+		this->addChild(m_spikes.at(i)->sprite);
 	}
 
 	aScorePickup = new ScorePickup(Vec2(70, 35));
