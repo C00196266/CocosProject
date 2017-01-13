@@ -22,10 +22,25 @@ void Level::createMap()
 			}
 			if (currentLevel[maxCol*(row)+column] == 1)
 			{
-				tiles.push_back(std::shared_ptr<Tiles>(new Tiles(Vec2((column*50)+posX, (row*50)+posY))));
+				tiles.push_back(std::shared_ptr<Tiles>(new Tiles(Vec2(((column)*50)+posX, ((maxRow-row)*50)+posY-25))));
+			}
+			if (currentLevel[maxCol*(row)+column] == 2)
+			{
+				scorePickups.push_back(std::shared_ptr<ScorePickup>(new ScorePickup(Vec2(((column) * 50) + posX, ((maxRow - row) * 50) + posY-25))));
+			}
+			if (currentLevel[maxCol*(row)+column] == 4)
+			{
+				theGoal = std::shared_ptr<Goal>(new Goal(Vec2(((column) * 50) + posX, ((maxRow - row) * 50) + posY - 20)));
 			}
 		}
 	}
+}
+
+void Level::resetMap()
+{
+	tiles.clear();
+	scorePickups.clear();
+	createMap();
 }
 
 const int Level::level1[16][21] =
@@ -51,4 +66,14 @@ const int Level::level1[16][21] =
 std::vector<std::shared_ptr<Tiles>>& Level::getTiles()
 {
 	return tiles;
+}
+
+std::shared_ptr<Goal> Level::getGoal()
+{
+	return theGoal;
+}
+
+std::vector<std::shared_ptr<ScorePickup>>& Level::getScorePickups()
+{
+	return scorePickups;
 }

@@ -6,12 +6,14 @@
 
 
 #include "cocos2d.h"
+#include "CollisionDetection.h"
 #include "Player.h"
 #include "HUD.h"
 #include "Tiles.h"
 #include "Goal.h"
 #include "Timer.h"
 #include "level.h"
+#include "ScorePickup.h"
 
 USING_NS_CC;
 class GameScreen : public cocos2d::Layer
@@ -25,9 +27,10 @@ public:
 	Sprite *background;
 	HUD *gameHUD;
 	Tiles* aTile;
-	Goal* theGoal;
+	std::shared_ptr<Goal> theGoal;
 	GameTimer* theTimer;
 	Level* levelManager;
+	CollisionDetection collisions;
 
 	static cocos2d::Scene* createScene();
 

@@ -20,7 +20,7 @@ bool GameScreen::init()
 	{
 		return false;
 	}
-
+	collisions = CollisionDetection();
 	auto background = cocos2d::LayerColor::create(Color4B(160, 193, 255, 255));
 	this->addChild(background);
 
@@ -53,11 +53,17 @@ bool GameScreen::init()
 		levelManager->getTiles().at(index)->sprite->setPosition(levelManager->getTiles().at(index)->getPos());
 		this->addChild(levelManager->getTiles().at(index)->sprite);
 	}
-	
-	theGoal = new Goal(Vec2(Director::getInstance()->getVisibleSize().width-200,30));
+	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
+	{
+		levelManager->getScorePickups().at(index)->sprite = Sprite::create("pickup01.png");
+		levelManager->getScorePickups().at(index)->sprite->setPosition(levelManager->getScorePickups().at(index)->getPos());
+		this->addChild(levelManager->getScorePickups().at(index)->sprite);
+	}
+	theGoal = levelManager->getGoal();
 	theGoal->sprite = Sprite::create("door.png");
 	theGoal->sprite->setPosition(theGoal->getPos());
 	this->addChild(theGoal->sprite);
+
 
 	//Player
 	thePlayer = new Player(Vec2(75,800),Color4F::RED);
@@ -81,12 +87,24 @@ void GameScreen::update(float deltaTime)
 	thePlayer->setVelocity(Vec2(thePlayer->getVelocity().x, thePlayer->getVelocity().y + thePlayer->getAcceleration().y*deltaTime));
 	thePlayer->collisionTop(aTile->getBoundingBox());
 	thePlayer->update(deltaTime);
-	if (thePlayer->collision(theGoal->getPos(), theGoal->getSize())==true)
+	//Score pickups
+	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
 	{
-		score=theTimer->calulateScore(score);
+		if (collisions.boundingBoxCollision(thePlayer->getPosition(), thePlayer->getSize(), levelManager->getScorePickups().at(index)->getPos(), levelManager->getScorePickups().at(index)->getSize()) == true)
+		{
+			score += 10;
+			this->removeChild(levelManager->getScorePickups().at(index)->sprite);
+			levelManager->getScorePickups().erase(levelManager->getScorePickups().begin() + index);
+		}
+	}
+	//Goal
+	if (collisions.boundingBoxCollision(thePlayer->getPosition(), thePlayer->getSize(), theGoal->getPos(), theGoal->getSize())==true)
+	{
+		score = theTimer->calulateScore(score);
 		theTimer->setGameOver(true);
 		theTimer->resetTimer();
 	}
+	//Timer
 	theTimer->incrementTimer(deltaTime);
 	if (theTimer->getGameOver() == true)
 	{
@@ -158,6 +176,20 @@ void GameScreen::resetScene()
 	theTimer->setGameOver(false);
 	theTimer->resetTimer();
 	score = 0;
+
+	levelManager->resetMap();
+	for (int index = 0; index < levelManager->getTiles().size(); index++)
+	{
+		levelManager->getTiles().at(index)->sprite = Sprite::create("Tile.png");
+		levelManager->getTiles().at(index)->sprite->setPosition(levelManager->getTiles().at(index)->getPos());
+		this->addChild(levelManager->getTiles().at(index)->sprite);
+	}
+	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
+	{
+		levelManager->getScorePickups().at(index)->sprite = Sprite::create("pickup01.png");
+		levelManager->getScorePickups().at(index)->sprite->setPosition(levelManager->getScorePickups().at(index)->getPos());
+		this->addChild(levelManager->getScorePickups().at(index)->sprite);
+	}
 }
 
 void GameScreen::menuCloseCallback(Ref* pSender)
