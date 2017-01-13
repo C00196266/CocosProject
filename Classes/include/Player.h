@@ -63,7 +63,17 @@ public:
 	void setNextY(float nextY);
 	float nextY();
 	float nextTop();
+	
+	float getGravityPower();
+	void setGravityPower(float newGravityPower);
+	bool getIsGravityOn();
+	void setIsGravityOn(bool isGravityOn);
 
+	bool collision(Vec2 otherPosition, Vec2 otherSize);
+
+	Vec2 getAcceleration();
+	void setAcceleration(Vec2 newAcceleration);
+	bool m_collision;
 private:
 	Vec2 m_acceleration;
 	Vec2 m_position;
@@ -73,6 +83,8 @@ private:
 	Vec2 m_size;
 	int m_score;
 	bool m_inAir;
-
+	float m_gravityPower;
+	bool m_isGravityOn;
+	const float m_gravityPowerRegen = 0.2;
 	Rect m_boundingBox;
 };

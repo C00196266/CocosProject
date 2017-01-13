@@ -23,4 +23,6 @@ public:
 	Sprite *sprite;
 
 	void CheckCollisionWithPlayer(Player * player);
+
+	bool m_collision;
 };
