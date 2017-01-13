@@ -7,28 +7,32 @@
 Player::Player()
 {
 	m_position = Vec2(50, 50);
+	m_nextPosition = m_position;
 	m_colour = Color4F::GREEN;
 	m_size = Vec2(50, 50);
 	m_score = 0;
-	m_isJumping = false;
+	m_inAir = false;
 	m_acceleration = Vec2(0, -9.8f);
+	m_boundingBox = Rect(m_position.x, m_position.y, m_size.x, m_size.y);
 }
 
 Player::Player(Vec2 position, Color4F colour)
 {
 	m_position = position;
+	m_nextPosition = m_position;
 	m_colour = colour;
 	m_size = Vec2(50, 50);
 	m_score = 0;
-	m_isJumping = false;
+	m_inAir = false;
 	m_acceleration = Vec2(0, -9.8f);
+	m_boundingBox = Rect(m_position.x, m_position.y, m_size.x, m_size.y);
 }
 
 void Player::update(float deltaTime)
 {
-	lastPosition = m_position;
+	m_position = m_nextPosition;
 	m_velocity.y += m_acceleration.y*deltaTime;
-	if (m_isJumping == false)
+	if (m_inAir == false)
 	{
 		if (direction == 0)//Left Direction
 		{
@@ -53,16 +57,7 @@ void Player::update(float deltaTime)
 			}
 		}
 	}
-	m_position.x += m_velocity.x;
-
-	if (m_position.y + m_velocity.y > (m_size.x / 2))//Gravity
-	{
-		m_position.y += m_velocity.y;
-	}
-	else
-	{
-		m_isJumping = false;
-	}
+	m_nextPosition += m_velocity;
 }
 
 //Position
@@ -83,6 +78,14 @@ Vec2 Player::getVelocity()
 void Player::setVelocity(Vec2 newVelocity)
 {
 	m_velocity = newVelocity;
+}
+
+void Player::setXVelocity(float xVel) {
+	m_velocity.x = xVel;
+}
+
+void Player::setYVelocity(float yVel) {
+	m_velocity.y = yVel;
 }
 
 //Colour
@@ -116,13 +119,21 @@ void Player::setScore(int newScore)
 }
 
 //Jumping
-bool Player::getIsJumping()
-{
-	return m_isJumping;
+//bool Player::getIsJumping()
+//{
+//	return m_isJumping;
+//}
+//void Player::setIsJumping(bool isJumping)
+//{
+//	m_isJumping = isJumping;
+//}
+
+bool Player::getInAir() {
+	return m_inAir;
 }
-void Player::setIsJumping(bool isJumping)
-{
-	m_isJumping = isJumping;
+
+void Player::setInAir(bool inAir) {
+	m_inAir = inAir;
 }
 
 void Player::setGravity(float gravity) {
@@ -132,3 +143,83 @@ void Player::setGravity(float gravity) {
 float Player::getGravity() {
 	return m_acceleration.y;
 }
+
+void Player::setBoundingBox(Rect newBox) {
+	m_boundingBox = newBox;
+}
+
+Rect Player::getBoundingBox() {
+	return m_boundingBox;
+}
+
+float Player::getX(){
+	return m_position.x;
+}
+
+void Player::setX(float x){
+	m_position.x = x;
+}
+
+float Player::getY(){
+	return m_position.y;
+}
+
+void Player::setY(float y){
+	m_position.y = y;
+}
+
+float Player::top() {
+	return (m_position.y + m_size.y);
+}
+
+float Player::right() {
+	return m_position.x + m_size.x;
+}
+
+Vec2 Player::getNextPos() {
+	return m_nextPosition;
+}
+
+void Player::setNextPos(Vec2 pos) {
+	m_nextPosition = pos;
+}
+
+float Player::nextX() {
+	return m_nextPosition.x;
+}
+
+float Player::nextY() {
+	return m_nextPosition.y;
+}
+
+float Player::nextRight() {
+	return m_nextPosition.x + m_size.x;
+}
+
+float Player::nextTop() {
+	return m_nextPosition.y + m_size.y;
+}
+
+void Player::setNextX(float nextX) {
+	m_nextPosition.x = nextX;
+}
+
+void Player::setNextY(float nextY) {
+	m_nextPosition.y = nextY;
+}
+
+//float Player::top() {
+//	return m_boundingBox.getMaxY();
+//}
+//
+//float Player::bottom() {
+//	return m_boundingBox.getMinY();
+//}
+//
+//float Player::left() {
+//	return m_boundingBox.getMinX();
+//}
+//
+//float Player::right() {
+//	return m_boundingBox.getMaxX();
+//}

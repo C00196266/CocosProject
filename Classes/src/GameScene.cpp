@@ -22,11 +22,77 @@ bool GameScreen::init()
 	}
 
 	for (int i = 0; i < 10; i++) {
-		m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(i * 50, 0))));
+		m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25 + (i * 50), 25))));
 		m_tiles.at(i)->sprite = Sprite::create("metalTile.png");
 		m_tiles.at(i)->sprite->setPosition(m_tiles.at(i)->getPos());
 		this->addChild(m_tiles.at(i)->sprite);
 	}
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 75))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 75))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 125))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 175))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 225))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 275))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 325))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 375))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 425))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 475))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 525))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(25, 575))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
+
+	m_tiles.push_back(shared_ptr<Tiles>(new Tiles(Vec2(75, 75))));
+	m_tiles.at(m_tiles.size() - 1)->sprite = Sprite::create("metalTile.png");
+	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
+	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
 
 	for (int i = 0; i < 2; i++) {
 		m_spikes.push_back(shared_ptr<Spikes>(new Spikes(Vec2(400 + (i * 50), 50))));
@@ -35,13 +101,13 @@ bool GameScreen::init()
 		this->addChild(m_spikes.at(i)->sprite);
 	}
 
-	aScorePickup = new ScorePickup(Vec2(70, 35));
+	aScorePickup = new ScorePickup(Vec2(700, 350));
 	aScorePickup->sprite = Sprite::create("pickup01.png");
 	aScorePickup->sprite->setPosition(aScorePickup->getPos());
 	this->addChild(aScorePickup->sprite);
 
 	//Player
-	thePlayer = new Player(Vec2(75, 800), Color4F::RED);
+	thePlayer = new Player(Vec2(175, 80), Color4F::RED);
 	thePlayer->setVelocity(Vec2(0, 0));
 	thePlayer->image = Sprite::create("Player.png");
 	thePlayer->image->setPosition(thePlayer->getPosition());
@@ -57,8 +123,8 @@ void GameScreen::update(float deltaTime)
 {
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	//Player
-	checkCollisions();
 	thePlayer->update(deltaTime);
+	checkCollisions();
 	thePlayer->image->setPosition(thePlayer->getPosition());
 }
 
@@ -66,25 +132,25 @@ void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
 	if (keyCode == EventKeyboard::KeyCode::KEY_LEFT_ARROW)
 	{
-		if (thePlayer->getIsJumping() == false)
+		if (thePlayer->getInAir() == false)
 		{
-			thePlayer->setVelocity(Vec2(-15, thePlayer->getVelocity().y));
+			thePlayer->setVelocity(Vec2(-10, thePlayer->getVelocity().y));
 			thePlayer->direction = 0;
 		}
 	}
 	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
 	{
-		if (thePlayer->getIsJumping() == false)
+		if (thePlayer->getInAir() == false)
 		{
-			thePlayer->setVelocity(Vec2(15, thePlayer->getVelocity().y));
+			thePlayer->setVelocity(Vec2(10, thePlayer->getVelocity().y));
 			thePlayer->direction = 1;
 		}
 	}
 	if (keyCode == EventKeyboard::KeyCode::KEY_SPACE)
 	{
-		if (thePlayer->getIsJumping() == false)
+		if (thePlayer->getInAir() == false)
 		{
-			thePlayer->setIsJumping(true);
+			thePlayer->setInAir(true);
 			thePlayer->setVelocity(Vec2(thePlayer->getVelocity().x, 12.5f));
 		}
 	}
@@ -97,13 +163,12 @@ void GameScreen::menuCloseCallback(Ref* pSender)
 }
 
 void GameScreen::checkCollisions() {
-	if (m_collisionDetector.boundingBoxCollision(thePlayer->image->getBoundingBox(), aScorePickup->sprite->getBoundingBox()) == true) {
-		thePlayer->setPosition(thePlayer->lastPosition);
-		thePlayer->setVelocity(Vec2(0,0));
-		thePlayer->setGravity(0);
+	for (int i = 0; i < m_tiles.size(); i++) {
+		m_tiles.at(i)->CheckCollisionWithPlayer(thePlayer);
 	}
-	else {
-		thePlayer->setGravity(-9.8f);
+
+	for (int i = 0; i < m_spikes.size(); i++){
+		m_spikes.at(i)->CheckCollisionWithPlayer(thePlayer);
 	}
 }
 

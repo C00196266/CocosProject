@@ -23,6 +23,8 @@ public:
 	bool boundingBoxCollisionRight(Rect object1rect, Rect object2rect);
 	bool boundingBoxCollisionBottom(Rect object1rect, Rect object2rect);
 
+	bool VerticalCollision();
+
 	//bool collisionPlayerTiles(Player thePlayer, shared_ptr<Tile> aTile);
 
 

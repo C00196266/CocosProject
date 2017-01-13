@@ -19,7 +19,6 @@ class GameScreen : public cocos2d::Layer
 private:
 	CollisionDetection m_collisionDetector;
 public:
-
 	Player *thePlayer;
     static cocos2d::Scene* createScene();
 	
