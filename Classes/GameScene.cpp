@@ -20,11 +20,7 @@ bool GameScreen::init()
 	{
 		return false;
 	}
-
-	//background = Sprite::create("Background.png");
-	//background->setAnchorPoint(Vec2(0, 1));
-	//background->setPosition(0, Director::getInstance()->getVisibleSize().height+100);
-	//this->addChild(background);
+	collisions = CollisionDetection();
 	auto background = cocos2d::LayerColor::create(Color4B(160, 193, 255, 255));
 	this->addChild(background);
 
@@ -44,6 +40,29 @@ bool GameScreen::init()
 	gameHUD->gravityBarOutline->setPosition(gameHUD->getGravityBarRect()->origin);
 	this->addChild(gameHUD->gravityBarOutline);
 
+	aTile = new Tiles(Vec2(25,25));
+	aTile->sprite = Sprite::create("Tile.png");
+	aTile->sprite->setPosition(aTile->getPos());
+	this->addChild(aTile->sprite);
+
+	levelManager = new Level();
+	levelManager->createMap();
+	for (int index = 0; index < levelManager->getTiles().size(); index++)
+	{
+		levelManager->getTiles().at(index)->sprite = Sprite::create("Tile.png");
+		levelManager->getTiles().at(index)->sprite->setPosition(levelManager->getTiles().at(index)->getPos());
+		this->addChild(levelManager->getTiles().at(index)->sprite);
+	}
+	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
+	{
+		levelManager->getScorePickups().at(index)->sprite = Sprite::create("pickup01.png");
+		levelManager->getScorePickups().at(index)->sprite->setPosition(levelManager->getScorePickups().at(index)->getPos());
+		this->addChild(levelManager->getScorePickups().at(index)->sprite);
+	}
+	theGoal = levelManager->getGoal();
+	theGoal->sprite = Sprite::create("door.png");
+	theGoal->sprite->setPosition(theGoal->getPos());
+	this->addChild(theGoal->sprite);
 
 
 	//Player
@@ -53,6 +72,7 @@ bool GameScreen::init()
 	thePlayer->image->setPosition(thePlayer->getPosition());
 	this->addChild(thePlayer->image);
 
+	theTimer = new GameTimer();
 	//keyboard Input
 	auto listener = EventListenerKeyboard::create();
 	listener->onKeyPressed = CC_CALLBACK_2(GameScreen::onKeyPressed, this);
@@ -64,8 +84,36 @@ void GameScreen::update(float deltaTime)
 	Size visibleSize = Director::getInstance()->getVisibleSize();
 	//Player
 	thePlayer->image->setPosition(thePlayer->getPosition());
+	thePlayer->setVelocity(Vec2(thePlayer->getVelocity().x, thePlayer->getVelocity().y + thePlayer->getAcceleration().y*deltaTime));
+	thePlayer->collisionTop(aTile->getBoundingBox());
 	thePlayer->update(deltaTime);
-	gameHUD->update(score,time,thePlayer->getGravityPower());
+	//Score pickups
+	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
+	{
+		if (collisions.boundingBoxCollision(thePlayer->getPosition(), thePlayer->getSize(), levelManager->getScorePickups().at(index)->getPos(), levelManager->getScorePickups().at(index)->getSize()) == true)
+		{
+			score += 10;
+			this->removeChild(levelManager->getScorePickups().at(index)->sprite);
+			levelManager->getScorePickups().erase(levelManager->getScorePickups().begin() + index);
+		}
+	}
+	//Goal
+	if (collisions.boundingBoxCollision(thePlayer->getPosition(), thePlayer->getSize(), theGoal->getPos(), theGoal->getSize())==true)
+	{
+		score = theTimer->calulateScore(score);
+		theTimer->setGameOver(true);
+		theTimer->resetTimer();
+	}
+	//Timer
+	theTimer->incrementTimer(deltaTime);
+	if (theTimer->getGameOver() == true)
+	{
+		if (theTimer->getSeconds() == 2)
+		{
+			resetScene();
+		}
+	}
+	gameHUD->update(score,theTimer->getTimer(),thePlayer->getGravityPower());
 }
 void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
@@ -75,6 +123,7 @@ void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		{
 			thePlayer->setVelocity(Vec2(-7.5, thePlayer->getVelocity().y));
 			thePlayer->direction = 0;
+			thePlayer->setAcceleration(Vec2(0,-9.8f));
 		}
 	}
 	if (keyCode == EventKeyboard::KeyCode::KEY_RIGHT_ARROW)
@@ -83,6 +132,7 @@ void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		{
 			thePlayer->setVelocity(Vec2(7.5, thePlayer->getVelocity().y));
 			thePlayer->direction = 1;
+			thePlayer->setAcceleration(Vec2(0, -9.8f));
 		}
 	}
 	if (keyCode == EventKeyboard::KeyCode::KEY_SPACE)
@@ -91,6 +141,7 @@ void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		{
 			thePlayer->setIsJumping(true);
 			thePlayer->setVelocity(Vec2(thePlayer->getVelocity().x, 10.0f));
+			thePlayer->setAcceleration(Vec2(0, -9.8f));
 		}
 	}
 	if (keyCode == EventKeyboard::KeyCode::KEY_SHIFT)
@@ -109,6 +160,35 @@ void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 				thePlayer->setIsGravityOn(false);
 			}
 		}
+	}
+}
+
+void GameScreen::resetScene()
+{
+	thePlayer->setPosition(Vec2(75, 800));
+	thePlayer->setVelocity(Vec2(0, 0));
+	thePlayer->setScore(0);
+	thePlayer->setIsJumping(true);
+	thePlayer->setAcceleration(Vec2(0, -9.8f));
+	thePlayer->setGravityPower(0);
+	thePlayer->setIsGravityOn(true);
+
+	theTimer->setGameOver(false);
+	theTimer->resetTimer();
+	score = 0;
+
+	levelManager->resetMap();
+	for (int index = 0; index < levelManager->getTiles().size(); index++)
+	{
+		levelManager->getTiles().at(index)->sprite = Sprite::create("Tile.png");
+		levelManager->getTiles().at(index)->sprite->setPosition(levelManager->getTiles().at(index)->getPos());
+		this->addChild(levelManager->getTiles().at(index)->sprite);
+	}
+	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
+	{
+		levelManager->getScorePickups().at(index)->sprite = Sprite::create("pickup01.png");
+		levelManager->getScorePickups().at(index)->sprite->setPosition(levelManager->getScorePickups().at(index)->getPos());
+		this->addChild(levelManager->getScorePickups().at(index)->sprite);
 	}
 }
 

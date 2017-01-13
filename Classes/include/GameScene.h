@@ -6,6 +6,7 @@
 
 
 #include "cocos2d.h"
+#include "CollisionDetection.h"
 #include "Player.h"
 #include "ScorePickup.h"
 #include "CollisionDetection.h"
@@ -13,6 +14,11 @@
 #include "Spikes.h"
 #include <vector>
 #include "HUD.h"
+#include "Tiles.h"
+#include "Goal.h"
+#include "Timer.h"
+#include "level.h"
+#include "ScorePickup.h"
 
 using namespace std;
 
@@ -28,6 +34,11 @@ public:
 	std::string time;
 	Sprite *background;
 	HUD *gameHUD;
+	Tiles* aTile;
+	std::shared_ptr<Goal> theGoal;
+	GameTimer* theTimer;
+	Level* levelManager;
+	CollisionDetection collisions;
 
 	static cocos2d::Scene* createScene();
 
@@ -36,7 +47,7 @@ public:
 
 	// a selector callback
 	void menuCloseCallback(cocos2d::Ref* pSender);
-
+	void resetScene();
 	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 
 	void checkCollisions();

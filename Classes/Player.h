@@ -28,7 +28,10 @@ public:
 	void setGravityPower(float newGravityPower);
 	bool getIsGravityOn();
 	void setIsGravityOn(bool isGravityOn);
+	Vec2 getAcceleration();
 	void setAcceleration(Vec2 newAcceleration);
+	bool collisionTop(Rect other);
+	bool collision(Vec2 m_pos, Vec2 m_size);
 private:
 	Vec2 m_acceleration;
 	Vec2 m_position;

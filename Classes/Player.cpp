@@ -2,7 +2,7 @@
 
 #pragma once
 #include "Player.h"
-
+#define COCOS2D_DEBUG 1
 
 Player::Player()
 {
@@ -10,7 +10,7 @@ Player::Player()
 	m_colour = Color4F::GREEN;
 	m_size = Vec2(50, 50);
 	m_score = 0;
-	m_isJumping = false;
+	m_isJumping = true;
 	m_acceleration = Vec2(0,-9.8f);
 	m_gravityPower = 0;
 	m_isGravityOn = true;
@@ -22,7 +22,7 @@ Player::Player(Vec2 position, Color4F colour)
 	m_colour = colour;
 	m_size = Vec2(50, 50);
 	m_score = 0;
-	m_isJumping = false;
+	m_isJumping = true;
 	m_acceleration = Vec2(0, -9.8f);
 	m_gravityPower = 0;
 	m_isGravityOn = true;
@@ -49,8 +49,6 @@ void Player::update(float deltaTime)
 			m_isGravityOn = true;
 		}
 	}
-
-	m_velocity.y += m_acceleration.y*deltaTime;
 	if (m_isJumping == false)
 	{
 		if (direction == 0)//Left Direction
@@ -61,7 +59,7 @@ void Player::update(float deltaTime)
 			}
 			else
 			{
-				m_velocity.x += 0.2;
+				m_velocity.x += 0.1;
 			}
 		}
 		if (direction == 1)//Right Direction
@@ -72,11 +70,17 @@ void Player::update(float deltaTime)
 			}
 			else
 			{
-				m_velocity.x -= 0.2;
+				m_velocity.x -= 0.1;
 			}
 		}
 	}
+	if (m_velocity.x == 0 && m_velocity.y == 0)
+	{
+		m_acceleration.y = 0;
+	}
 	m_position.x += m_velocity.x;
+
+	//m_velocity.y += m_acceleration.y*deltaTime;
 
 	if (m_position.y + m_velocity.y > (m_size.x/2))//Gravity
 	{
@@ -86,6 +90,7 @@ void Player::update(float deltaTime)
 	{
 		m_isJumping = false;
 	}
+
 }
 
 
@@ -172,7 +177,42 @@ void Player::setIsGravityOn(bool isGravityOn)
 	m_isGravityOn = isGravityOn;
 }
 
+Vec2 Player::getAcceleration()
+{
+	return m_acceleration;
+}
 void Player::setAcceleration(Vec2 newAcceleration)
 {
 	m_acceleration = newAcceleration;
+}
+
+bool Player::collisionTop(Rect other)
+{
+	bool collides = false;
+	if (m_position.y + m_velocity.y < other.getMaxY() && !(m_position.y > other.getMaxY()))
+	{
+		if (m_position.x + m_size.x > other.getMinX() && m_position.x < other.getMaxX())
+		{
+			collides = true;
+			//m_position.y = other.getMaxY() + m_size.y;
+			//m_velocity.x = 0;
+			m_velocity.y = 0;
+			m_isJumping = false;
+			CCLOG("%s", "It worked");
+		}
+	}
+
+	return collides;
+}
+
+bool Player::collision(Vec2 otherPosition, Vec2 otherSize)
+{
+	bool collides = false;
+
+	if ((m_position.x < otherPosition.x + otherSize.x) && (m_position.x + m_size.x > otherPosition.x)
+		&& (m_position.y + m_size.y > otherPosition.y) && (m_position.y < otherPosition.y + otherSize.y)) {
+		collides = true;
+	}
+
+	return collides;
 }
