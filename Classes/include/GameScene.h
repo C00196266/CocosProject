@@ -8,6 +8,11 @@
 #include "cocos2d.h"
 #include "CollisionDetection.h"
 #include "Player.h"
+#include "ScorePickup.h"
+#include "CollisionDetection.h"
+#include "Tiles.h"
+#include "Spikes.h"
+#include <vector>
 #include "HUD.h"
 #include "Tiles.h"
 #include "Goal.h"
@@ -15,11 +20,14 @@
 #include "level.h"
 #include "ScorePickup.h"
 
+using namespace std;
+
 USING_NS_CC;
 class GameScreen : public cocos2d::Layer
 {
+private:
+	CollisionDetection m_collisionDetector;
 public:
-
 	Player *thePlayer;
 	const float maxGravityPower = 100;
 	int score;
@@ -42,6 +50,7 @@ public:
 	void resetScene();
 	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 
+	void checkCollisions();
 
 	void GameScreen::update(float deltaTime);
 	// implement the "static create()" method manually
