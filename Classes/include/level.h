@@ -4,6 +4,7 @@
 #include "Goal.h"
 #include "Tiles.h"
 #include "ScorePickup.h"
+#include "Spikes.h"
 
 USING_NS_CC;
 
@@ -17,6 +18,8 @@ public:
 	void resetMap();
 	std::vector<std::shared_ptr<Tiles>> tiles;
 	std::vector<std::shared_ptr<Tiles>>& Level::getTiles();
+	std::vector<std::shared_ptr<Spikes>> spikes;
+	std::vector<std::shared_ptr<Spikes>>& Level::getSpikes();
 	std::vector<std::shared_ptr<ScorePickup>> scorePickups;
 	std::vector<std::shared_ptr<ScorePickup>>& Level::getScorePickups();
 	static const int level1[16][21];

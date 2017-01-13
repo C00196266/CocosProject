@@ -28,6 +28,10 @@ void Level::createMap()
 			{
 				scorePickups.push_back(std::shared_ptr<ScorePickup>(new ScorePickup(Vec2(((column) * 50) + posX, ((maxRow - row) * 50) + posY-25))));
 			}
+			if (currentLevel[maxCol*(row)+column] == 3)
+			{
+				spikes.push_back(std::shared_ptr<Spikes>(new Spikes(Vec2(((column) * 50) + posX, ((maxRow - row) * 50) + posY - 25))));
+			}
 			if (currentLevel[maxCol*(row)+column] == 4)
 			{
 				theGoal = std::shared_ptr<Goal>(new Goal(Vec2(((column) * 50) + posX, ((maxRow - row) * 50) + posY - 20)));
@@ -38,6 +42,7 @@ void Level::createMap()
 
 void Level::resetMap()
 {
+	spikes.clear();
 	tiles.clear();
 	scorePickups.clear();
 	createMap();
@@ -76,4 +81,9 @@ std::shared_ptr<Goal> Level::getGoal()
 std::vector<std::shared_ptr<ScorePickup>>& Level::getScorePickups()
 {
 	return scorePickups;
+}
+
+std::vector<std::shared_ptr<Spikes>>& Level::getSpikes()
+{
+	return spikes;
 }

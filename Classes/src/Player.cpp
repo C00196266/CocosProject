@@ -9,7 +9,7 @@ Player::Player()
 	m_position = Vec2(50, 50);
 	m_nextPosition = m_position;
 	m_colour = Color4F::GREEN;
-	m_size = Vec2(50, 50);
+	m_size = Vec2(45, 45);
 	m_score = 0;
 	m_inAir = true;
 	m_acceleration = Vec2(0, -9.8f);
@@ -17,6 +17,7 @@ Player::Player()
 	m_gravityPower = 0;
 	m_isGravityOn = true;
 	m_collision = false;
+	m_isAlive = true;
 }
 
 Player::Player(Vec2 position, Color4F colour)
@@ -24,7 +25,7 @@ Player::Player(Vec2 position, Color4F colour)
 	m_position = position;
 	m_nextPosition = m_position;
 	m_colour = colour;
-	m_size = Vec2(50, 50);
+	m_size = Vec2(45, 45);
 	m_score = 0;
 	m_inAir = true;
 	m_acceleration = Vec2(0, -9.8f);
@@ -32,6 +33,7 @@ Player::Player(Vec2 position, Color4F colour)
 	m_gravityPower = 0;
 	m_isGravityOn = true;
 	m_collision = false;
+	m_isAlive = true;
 }
 
 void Player::update(float deltaTime)

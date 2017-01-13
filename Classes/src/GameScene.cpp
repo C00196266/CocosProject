@@ -94,7 +94,7 @@ bool GameScreen::init()
 	m_tiles.at(m_tiles.size() - 1)->sprite->setPosition(m_tiles.at(m_tiles.size() - 1)->getPos());
 	this->addChild(m_tiles.at(m_tiles.size() - 1)->sprite);
 	*/
-	auto background = cocos2d::LayerColor::create(Color4B(160, 193, 255, 255));
+	auto background = cocos2d::LayerColor::create(Color4B(0, 0, 0, 255));
 	this->addChild(background);
 	
 	score = 0;
@@ -117,7 +117,7 @@ bool GameScreen::init()
 	levelManager->createMap();
 	for (int index = 0; index < levelManager->getTiles().size(); index++)
 	{
-		levelManager->getTiles().at(index)->sprite = Sprite::create("Tile.png");
+		levelManager->getTiles().at(index)->sprite = Sprite::create("metalTile.png");
 		levelManager->getTiles().at(index)->sprite->setPosition(levelManager->getTiles().at(index)->getPos());
 		this->addChild(levelManager->getTiles().at(index)->sprite);
 	}
@@ -132,16 +132,15 @@ bool GameScreen::init()
 	theGoal->sprite->setPosition(theGoal->getPos());
 	this->addChild(theGoal->sprite);
 	
-	/*
-	for (int i = 0; i < 2; i++) {
-		m_spikes.push_back(shared_ptr<Spikes>(new Spikes(Vec2(400 + (i * 50), 50))));
-		m_spikes.at(i)->sprite = Sprite::create("spike.png");
-		m_spikes.at(i)->sprite->setPosition(m_spikes.at(i)->getPos());
-		this->addChild(m_spikes.at(i)->sprite);
+	
+	for (int i = 0; i < levelManager->getSpikes().size(); i++) {
+		levelManager->getSpikes().at(i)->sprite = Sprite::create("spike.png");
+		levelManager->getSpikes().at(i)->sprite->setPosition(levelManager->getSpikes().at(i)->getPos());
+		this->addChild(levelManager->getSpikes().at(i)->sprite);
 	}
-	*/
+	
 	//Player
-	thePlayer = new Player(Vec2(175, 800), Color4F::RED);
+	thePlayer = new Player(Vec2(175, 125), Color4F::RED);
 	thePlayer->setVelocity(Vec2(0, 0));
 	thePlayer->image = Sprite::create("Player.png");
 	thePlayer->image->setPosition(thePlayer->getPosition());
@@ -162,8 +161,6 @@ void GameScreen::update(float deltaTime)
 	thePlayer->update(deltaTime);
 	checkCollisions();
 	thePlayer->image->setPosition(thePlayer->getPosition());
-	
-	
 
 	//Score pickups
 	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
@@ -192,11 +189,15 @@ void GameScreen::update(float deltaTime)
 		}
 	}
 	gameHUD->update(score,theTimer->getTimer(),thePlayer->getGravityPower());
+
+	if (thePlayer->m_isAlive == false) {
+		resetScene();
+	}
 }
 
 void GameScreen::resetScene()
 {
-	thePlayer->setNextPos(Vec2(75, 800));
+	thePlayer->setNextPos(Vec2(75, 125));
 	thePlayer->setVelocity(Vec2(0, 0));
 	thePlayer->setScore(0);
 	thePlayer->setInAir(true);
@@ -204,15 +205,33 @@ void GameScreen::resetScene()
 	thePlayer->setGravityPower(0);
 	thePlayer->setIsGravityOn(true);
 	thePlayer->image->setPosition(thePlayer->getPosition());
+	thePlayer->m_isAlive = true;
 
 	theTimer->setGameOver(false);
 	theTimer->resetTimer();
 	score = 0;
 
+	for (int index = 0; index < levelManager->getScorePickups().size(); index++)
+	{
+		this->removeChild(levelManager->getScorePickups().at(index)->sprite);
+	}
+
+	for (int index = 0; index < levelManager->getSpikes().size(); index++)
+	{
+		this->removeChild(levelManager->getSpikes().at(index)->sprite);
+	}
+
+	for (int index = 0; index < levelManager->getTiles().size(); index++)
+	{
+		this->removeChild(levelManager->getTiles().at(index)->sprite);
+	}
+
+	this->removeChild(levelManager->getGoal()->sprite);
+
 	levelManager->resetMap();
 	for (int index = 0; index < levelManager->getTiles().size(); index++)
 	{
-		levelManager->getTiles().at(index)->sprite = Sprite::create("Tile.png");
+		levelManager->getTiles().at(index)->sprite = Sprite::create("metalTile.png");
 		levelManager->getTiles().at(index)->sprite->setPosition(levelManager->getTiles().at(index)->getPos());
 		this->addChild(levelManager->getTiles().at(index)->sprite);
 	}
@@ -222,6 +241,24 @@ void GameScreen::resetScene()
 		levelManager->getScorePickups().at(index)->sprite->setPosition(levelManager->getScorePickups().at(index)->getPos());
 		this->addChild(levelManager->getScorePickups().at(index)->sprite);
 	}
+
+	for (int index = 0; index < levelManager->getSpikes().size(); index++)
+	{
+		levelManager->getSpikes().at(index)->sprite = Sprite::create("spike.png");
+		levelManager->getSpikes().at(index)->sprite->setPosition(levelManager->getSpikes().at(index)->getPos());
+		this->addChild(levelManager->getSpikes().at(index)->sprite);
+	}
+
+	theGoal = levelManager->getGoal();
+	theGoal->sprite = Sprite::create("door.png");
+	theGoal->sprite->setPosition(theGoal->getPos());
+	this->addChild(theGoal->sprite);
+
+	this->removeChild(thePlayer->image);
+
+	thePlayer->image = Sprite::create("Player.png");
+	thePlayer->image->setPosition(thePlayer->getPosition());
+	this->addChild(thePlayer->image);
 }
 
 void GameScreen::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
@@ -283,7 +320,10 @@ void GameScreen::checkCollisions() {
 	for (int i = 0; i < levelManager->getScorePickups().size(); i++){
 		thePlayer->collision(levelManager->getScorePickups().at(i)->getPos(), levelManager->getScorePickups().at(i)->getSize());
 	}
-	
+	for (int i = 0; i < levelManager->getSpikes().size(); i++) {
+		levelManager->getSpikes().at(i)->CheckCollisionWithPlayer(thePlayer);
+	}
+	thePlayer->m_collision = false;
 }
 
   

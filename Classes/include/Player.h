@@ -74,6 +74,8 @@ public:
 	Vec2 getAcceleration();
 	void setAcceleration(Vec2 newAcceleration);
 	bool m_collision;
+	bool m_isAlive;
+
 private:
 	Vec2 m_acceleration;
 	Vec2 m_position;
