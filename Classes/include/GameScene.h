@@ -1,4 +1,6 @@
 
+
+
 #ifndef __Game_SCENE_H__
 #define __Game_SCENE_H__
 
@@ -10,6 +12,7 @@
 #include "Tiles.h"
 #include "Spikes.h"
 #include <vector>
+#include "HUD.h"
 
 using namespace std;
 
@@ -20,26 +23,27 @@ private:
 	CollisionDetection m_collisionDetector;
 public:
 	Player *thePlayer;
-    static cocos2d::Scene* createScene();
-	
-	ScorePickup *aScorePickup;
+	const float maxGravityPower = 100;
+	int score;
+	std::string time;
+	Sprite *background;
+	HUD *gameHUD;
 
-	vector<shared_ptr<Tiles>> m_tiles;
+	static cocos2d::Scene* createScene();
 
-	vector<shared_ptr<Spikes>> m_spikes;
 
-    virtual bool init();
-    
-    // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
+	virtual bool init();
+
+	// a selector callback
+	void menuCloseCallback(cocos2d::Ref* pSender);
 
 	void onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event);
 
 	void checkCollisions();
 
 	void GameScreen::update(float deltaTime);
-    // implement the "static create()" method manually
-    CREATE_FUNC(GameScreen);
+	// implement the "static create()" method manually
+	CREATE_FUNC(GameScreen);
 };
 
 #endif // __Game_SCENE_H__
