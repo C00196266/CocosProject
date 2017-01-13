@@ -39,6 +39,7 @@ public:
 	GameTimer* theTimer;
 	Level* levelManager;
 	CollisionDetection collisions;
+	std::vector<std::shared_ptr<Spikes>> m_spikes;
 
 	static cocos2d::Scene* createScene();
 

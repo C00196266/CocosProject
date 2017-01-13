@@ -11,9 +11,11 @@ Player::Player()
 	m_colour = Color4F::GREEN;
 	m_size = Vec2(50, 50);
 	m_score = 0;
-	m_inAir = false;
+	m_inAir = true;
 	m_acceleration = Vec2(0, -9.8f);
 	m_boundingBox = Rect(m_position.x, m_position.y, m_size.x, m_size.y);
+	m_gravityPower = 0;
+	m_isGravityOn = true;
 }
 
 Player::Player(Vec2 position, Color4F colour)
@@ -23,13 +25,36 @@ Player::Player(Vec2 position, Color4F colour)
 	m_colour = colour;
 	m_size = Vec2(50, 50);
 	m_score = 0;
-	m_inAir = false;
+	m_inAir = true;
 	m_acceleration = Vec2(0, -9.8f);
 	m_boundingBox = Rect(m_position.x, m_position.y, m_size.x, m_size.y);
+	m_gravityPower = 0;
+	m_isGravityOn = true;
 }
 
 void Player::update(float deltaTime)
 {
+	if (m_gravityPower + m_gravityPowerRegen < 100)
+	{
+		m_gravityPower += m_gravityPowerRegen;
+	}
+	else
+	{
+		m_gravityPower = 100;
+	}
+
+	if (m_isGravityOn == false & m_gravityPower > 0)//Gravity Power Reduction
+	{
+		m_gravityPower -= 1.0;
+		if (m_gravityPower < 0)
+		{
+			m_gravityPower = 0;
+			m_acceleration.y = -9.8;
+			m_isGravityOn = true;
+		}
+	}
+
+	
 	m_position = m_nextPosition;
 	m_velocity.y += m_acceleration.y*deltaTime;
 	if (m_inAir == false)
@@ -128,6 +153,15 @@ void Player::setScore(int newScore)
 //	m_isJumping = isJumping;
 //}
 
+float Player::getGravityPower()
+{
+	return m_gravityPower;
+}
+void Player::setGravityPower(float newGravityPower)
+{
+	m_gravityPower = newGravityPower;
+}
+
 bool Player::getInAir() {
 	return m_inAir;
 }
@@ -206,6 +240,37 @@ void Player::setNextX(float nextX) {
 
 void Player::setNextY(float nextY) {
 	m_nextPosition.y = nextY;
+}
+
+bool Player::collision(Vec2 otherPosition, Vec2 otherSize)
+{
+	bool collides = false;
+
+	if ((m_position.x < otherPosition.x + otherSize.x) && (m_position.x + m_size.x > otherPosition.x)
+		&& (m_position.y + m_size.y > otherPosition.y) && (m_position.y < otherPosition.y + otherSize.y)) {
+		collides = true;
+	}
+
+	return collides;
+}
+
+
+bool Player::getIsGravityOn()
+{
+	return m_isGravityOn;
+}
+void Player::setIsGravityOn(bool isGravityOn)
+{
+	m_isGravityOn = isGravityOn;
+}
+
+Vec2 Player::getAcceleration()
+{
+	return m_acceleration;
+}
+void Player::setAcceleration(Vec2 newAcceleration)
+{
+	m_acceleration = newAcceleration;
 }
 
 //float Player::top() {

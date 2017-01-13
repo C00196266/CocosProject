@@ -43,9 +43,9 @@ int GameTimer::calulateScore(int playerScore)
 		gameOver = true;
 		// returns a value depending on how long the player takes to complete a level
 		//why divide by 1000??????????????
-		if (playerScore - (totalTime / 1000) > 0)
+		if (playerScore + (200/totalTime) > 0)
 		{
-			return (playerScore - (totalTime / 1000));
+			return (playerScore + (200 / totalTime));
 		}
 		else 
 		{
